@@ -2,54 +2,37 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'pro-ecommerce'
-        CONTAINER_NAME = 'pro-ecommerce-container'
-        PORT = '8080'
+        COMPOSE_FILE = 'docker-compose.yaml'
+        APP_PORT = '8082'
     }
 
     stages {
-        stage('Clone') {
+        stage('Clonar Repositorio') {
             steps {
-                timeout(time: 5, unit: 'MINUTES') {
-                    git branch: 'master', url: 'https://github.com/JuanJoseHack/Gardenia-Remasterizado-.git'
-                }
+                git branch: 'master', url: 'https://github.com/JuanJoseHack/Gardenia-Remasterizado-.git'
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Levantar Servicios') {
             steps {
-                timeout(time: 5, unit: 'MINUTES') {
-                    script {
-                        sh 'docker build -t $IMAGE_NAME .'
-                    }
-                }
-            }
-        }
-
-        stage('Deploy Container') {
-            steps {
-                timeout(time: 5, unit: 'MINUTES') {
-                    script {
-                        // Elimina cualquier contenedor previo
-                        sh '''
-                            docker rm -f $CONTAINER_NAME || true
-                            docker run -d --name $CONTAINER_NAME -p $PORT:80 $IMAGE_NAME
-                        '''
-                    }
+                script {
+                    sh 'docker-compose down || true'  // Apaga servicios anteriores
+                    sh 'mvn clean package -DskipTests'
+                    sh 'docker-compose build'
+                    sh 'docker-compose up -d'
                 }
             }
         }
 
         stage('Health Check') {
             steps {
-                timeout(time: 2, unit: 'MINUTES') {
-                    script {
-                        // Verifica que el sitio responda
-                        sh '''
-                            sleep 5
-                            curl -I http://localhost:$PORT || echo "La aplicación no respondió correctamente"
-                        '''
-                    }
+                script {
+                    // Esperar que arranque Spring Boot
+                    sh '''
+                        echo "⏳ Esperando que la aplicación esté disponible..."
+                        sleep 15
+                        curl -I http://localhost:${APP_PORT} || echo "⚠️ La aplicación no respondió"
+                    '''
                 }
             }
         }
@@ -57,13 +40,17 @@ pipeline {
 
     post {
         success {
-            echo "🚀 Sitio desplegado exitosamente en http://localhost:$PORT"
+            echo "✅ Despliegue exitoso: http://localhost:${APP_PORT}"
         }
         failure {
-            echo "❌ Falló el despliegue del sitio"
+            echo "❌ Falló el despliegue"
         }
         always {
-            cleanWs()
+            script {
+                // Opcional: bajar contenedores y limpiar
+                sh 'docker-compose down'
+                cleanWs()
+            }
         }
     }
 }
