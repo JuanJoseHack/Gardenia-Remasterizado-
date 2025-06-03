@@ -11,7 +11,7 @@ pipeline {
         stage('Clone') {
             steps {
                 timeout(time: 5, unit: 'MINUTES') {
-                    git branch: 'main', url: 'https://github.com/JuanJoseHack/Gardenia-Remasterizado-.git'
+                    git branch: 'master', url: 'https://github.com/JuanJoseHack/Gardenia-Remasterizado-.git'
                 }
             }
         }
