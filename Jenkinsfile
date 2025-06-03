@@ -7,7 +7,7 @@ pipeline {
     }
 
     environment {
-        COMPOSE_FILE = 'docker-compose.yaml'
+        COMPOSE_FILE = 'docker-compose.yml'
         APP_PORT = '8082'
     }
 
