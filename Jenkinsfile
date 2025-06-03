@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    tools {
+        // Asegúrate de tener una instalación de Maven en Jenkins con este nombre
+        maven "MAVEN_HOME"
+    }
+
     environment {
         COMPOSE_FILE = 'docker-compose.yaml'
         APP_PORT = '8082'
@@ -16,7 +21,8 @@ pipeline {
         stage('Levantar Servicios') {
             steps {
                 script {
-                    sh 'docker-compose down || true'  // Apaga servicios anteriores
+                    // Apaga servicios anteriores, compila, construye y levanta
+                    sh 'docker-compose down || true'
                     sh 'mvn clean package -DskipTests'
                     sh 'docker-compose build'
                     sh 'docker-compose up -d'
@@ -27,9 +33,8 @@ pipeline {
         stage('Health Check') {
             steps {
                 script {
-                    // Esperar que arranque Spring Boot
+                    echo "⏳ Esperando que la aplicación esté disponible..."
                     sh '''
-                        echo "⏳ Esperando que la aplicación esté disponible..."
                         sleep 15
                         curl -I http://localhost:${APP_PORT} || echo "⚠️ La aplicación no respondió"
                     '''
@@ -47,7 +52,6 @@ pipeline {
         }
         always {
             script {
-                // Opcional: bajar contenedores y limpiar
                 sh 'docker-compose down'
                 cleanWs()
             }
