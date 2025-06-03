@@ -22,10 +22,10 @@ pipeline {
             steps {
                 script {
                     // Apaga servicios anteriores, compila, construye y levanta
-                    sh 'docker-compose down || true'
+                    sh 'docker compose down || true'
                     sh 'mvn clean package -DskipTests'
-                    sh 'docker-compose build'
-                    sh 'docker-compose up -d'
+                    sh 'docker compose build'
+                    sh 'docker compose up -d'
                 }
             }
         }
@@ -52,7 +52,7 @@ pipeline {
         }
         always {
             script {
-                sh 'docker-compose down'
+                sh 'docker compose down'
                 cleanWs()
             }
         }
