@@ -1,0 +1,26 @@
+
+server:
+  port: 8083
+
+spring:
+  application:
+    name: gardenia
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost/gardenia?serverTimezone=America/Lima&useSSL=false
+    #url: jdbc:mysql://db/ecommerce_lp2?serverTimezone=America/Lima&useSSL=false
+    username: root
+    password: admin
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+logging:
+  level:
+    org.hibernate.sql: debug

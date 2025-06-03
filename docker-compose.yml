@@ -12,18 +12,17 @@ services:
       - mysql_data:/var/lib/mysql
       - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
-      - '3308:3306'  # Puerto del host 3308 → contenedor 3306
+      - '3308:3306'
     command: --default-authentication-plugin=mysql_native_password
 
   app:
-    build: .
-    container_name: gardenia-app
+    build: .  # Construirá usando el Dockerfile en el mismo directorio
     depends_on:
       - db
     ports:
-      - '8082:8080'  # Puerto del host 8082 → contenedor 8080 (Spring Boot)
+      - '8082:8082'
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/ecommerce_lp2?serverTimezone=America/Lima&useSSL=false
+      SPRING_DATASOURCE_URL: jdbc:mysql://db/gardenia?serverTimezone=America/Lima&useSSL=false
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: admin
     restart: on-failure
