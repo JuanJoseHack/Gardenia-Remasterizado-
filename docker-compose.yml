@@ -12,20 +12,36 @@ services:
       - mysql_data:/var/lib/mysql
       - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
-      - '3308:3306'
+      - '3309:3306'
     command: --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p202100067"]
+      timeout: 20s
+      retries: 10
+      start_period: 40s
+    networks:
+      - backend
 
   app:
-    build: .  # Construirá usando el Dockerfile en el mismo directorio
+    build: .
+    container_name: gardenia_app
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     ports:
-      - '8086:8080'
+      - '8084:8084'
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db/gardenia?serverTimezone=America/Lima&useSSL=false
+      SPRING_DATASOURCE_URL: jdbc:mysql://db/gardenia?serverTimezone=America/Lima&useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: 202100067
-    restart: on-failure
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+    restart: unless-stopped
+    networks:
+      - backend
 
 volumes:
   mysql_data:
+
+networks:
+  backend:
+    name: gardenia_net
