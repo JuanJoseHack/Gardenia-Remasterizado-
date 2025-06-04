@@ -8,7 +8,7 @@ WORKDIR /app
 COPY target/Gardenia-0.0.1-SNAPSHOT.jar app.jar
 
 # Exponemos el puerto del Spring Boot (ajústalo si usas otro)
-EXPOSE 8080
+EXPOSE 8086
 
 # Comando para correr el app
 ENTRYPOINT ["java", "-jar", "app.jar"]
