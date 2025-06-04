@@ -1,97 +1,69 @@
-DROP TABLE IF EXISTS ordersproducts;
-DROP TABLE IF EXISTS stocks;
-DROP TABLE IF EXISTS orders;
-DROP TABLE IF EXISTS products;
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS categories;
+-- Eliminar las tablas si existen (en orden por dependencias)
+DROP TABLE IF EXISTS detalles;
+DROP TABLE IF EXISTS ordenes;
+DROP TABLE IF EXISTS productos;
+DROP TABLE IF EXISTS usuarios;
 
--- Resto de tu script actual...
-
-CREATE TABLE IF NOT EXISTS categories (
+-- Crear tabla usuarios
+CREATE TABLE IF NOT EXISTS usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    status VARCHAR(50)
-);
-
-CREATE TABLE IF NOT EXISTS users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50) NOT NULL UNIQUE,
-    first_name VARCHAR(100),
-    last_name VARCHAR(100),
+    nombre VARCHAR(100),
+    apellido VARCHAR(100),
     email VARCHAR(100) NOT NULL UNIQUE,
-    address VARCHAR(255),
-    cellphone VARCHAR(20),
-    password VARCHAR(255) NOT NULL,
-    date_created DATETIME,
-    type_user ENUM('ADMIN','USER') NOT NULL
+    direccion VARCHAR(255),
+    telefono VARCHAR(20),
+    tipo VARCHAR(20),
+    password VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS products (
+-- Crear tabla productos
+CREATE TABLE IF NOT EXISTS productos (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    code VARCHAR(50) UNIQUE,
-    name VARCHAR(100) NOT NULL,
-    description TEXT,
-    image VARCHAR(255),
-    price DECIMAL(10,2) NOT NULL,
-    date_created DATETIME,
-    date_updated DATETIME,
-    user_id INT,
-    category_id INT,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (category_id) REFERENCES categories(id)
+    nombre VARCHAR(100),
+    descripcion TEXT,
+    imagen VARCHAR(255),
+    precio DOUBLE,
+    cantidad INT,
+    usuario_id INT,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );
 
-CREATE TABLE IF NOT EXISTS orders (
+-- Crear tabla ordenes
+CREATE TABLE IF NOT EXISTS ordenes (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    date_created DATETIME,
-    status VARCHAR(50),
-    total VARCHAR(50),
-    user_id INT,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    numero VARCHAR(100),
+    fecha_creacion DATETIME,
+    fecha_recibida DATETIME,
+    total DOUBLE,
+    usuario_id INT,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );
 
-CREATE TABLE IF NOT EXISTS stocks (
+-- Crear tabla detalles (DetalleOrden)
+CREATE TABLE IF NOT EXISTS detalles (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    descripcion VARCHAR(255),
-    entradas INT,
-    salidas INT,
-    balance INT,
-    product_id INT,
-    FOREIGN KEY (product_id) REFERENCES products(id)
+    nombre VARCHAR(100),
+    cantidad DOUBLE,
+    precio DOUBLE,
+    total DOUBLE,
+    orden_id INT,
+    producto_id INT,
+    FOREIGN KEY (orden_id) REFERENCES ordenes(id),
+    FOREIGN KEY (producto_id) REFERENCES productos(id)
 );
 
-CREATE TABLE IF NOT EXISTS ordersproducts (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    quantity INT NOT NULL,
-    product_id INT,
-    order_id INT,
-    FOREIGN KEY (product_id) REFERENCES products(id),
-    FOREIGN KEY (order_id) REFERENCES orders(id)
-);
-
--- 2. Insertar categorías básicas
-INSERT INTO categories (name, status) VALUES
-('Electrónicos', 'ACTIVE'),
-('Ropa', 'ACTIVE'),
-('Hogar', 'ACTIVE'),
-('Deportes', 'ACTIVE');
-
--- 3. Crear usuario ADMIN
-INSERT INTO users (
-    username,
-    first_name,
-    last_name,
-    email,
-    password,
-    date_created,
-    type_user
+-- Insertar usuario administrador
+INSERT INTO usuarios (
+    nombre, apellido, email, direccion, telefono, tipo, password
 ) VALUES (
-    'admin',
-    'Administrador',
-    'del Sistema',
-    'admin@ecommerce.com',
-    -- Password: Admin123 (debes encriptarlo en producción)
-    '$2a$10$xLFtBIXGtYvAbRqM95JhYeuNd/h6q5r6mhknU9t.ChkmY8b0F.Q0K',
-    NOW(),
-    'ADMIN'
+    'Administrador', 'General', 'admin@gardenia.com', 'Av. Siempre Viva 123', '999999999', 'ADMIN',
+    -- Contraseña hasheada (ejemplo con BCrypt para "Admin123")
+    '$2a$10$xLFtBIXGtYvAbRqM95JhYeuNd/h6q5r6mhknU9t.ChkmY8b0F.Q0K'
 );
+
+-- Insertar productos de ejemplo
+INSERT INTO productos (
+    nombre, descripcion, imagen, precio, cantidad, usuario_id
+) VALUES
+('Laptop Lenovo', 'Laptop de alto rendimiento', 'laptop.jpg', 3500.00, 10, 1),
+('Camiseta Negra', 'Camiseta de algodón 100%', 'camiseta.jpg', 45.00, 50, 1);

@@ -1,4 +1,3 @@
-
 server:
   port: 8083
 
@@ -8,9 +7,9 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost/gardenia?serverTimezone=America/Lima&useSSL=false
-    #url: jdbc:mysql://db/ecommerce_lp2?serverTimezone=America/Lima&useSSL=false
+    #url: jdbc:mysql://db/gardenia?serverTimezone=America/Lima&useSSL=false
     username: root
-    password: admin
+    password: 202100067
 
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
