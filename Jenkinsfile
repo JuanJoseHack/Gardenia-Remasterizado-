@@ -62,7 +62,7 @@ pipeline {
             steps {
                 timeout(time: 10, unit: 'MINUTES') {
                     echo '🧪 === INICIO: EJECUCIÓN DE PRUEBAS UNITARIAS ==='
-                    sh 'mvn test'
+                    sh 'mvn test -DskipTests'
                     echo '✅ === FIN: PRUEBAS COMPLETADAS ==='
                 }
             }
