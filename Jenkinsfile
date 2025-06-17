@@ -84,7 +84,7 @@ pipeline {
         // 🎯 Etapa 5: Verificación de calidad
         stage('Quality Gate') {
             steps {
-                timeout(time: 20, unit: 'MINUTES') {
+                timeout(time: 30, unit: 'MINUTES') {
                     echo '🎯 === VERIFICACIÓN DE ESTÁNDARES DE CALIDAD ==='
                     waitForQualityGate abortPipeline: true
                     echo '✅ === FIN: VERIFICACIÓN DE CALIDAD COMPLETADA ==='
