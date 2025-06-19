@@ -6,8 +6,8 @@ spring:
     name: gardenia
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost/gardenia?serverTimezone=America/Lima&useSSL=false
-    #url: jdbc:mysql://db/gardenia?serverTimezone=America/Lima&useSSL=false
+    #url: jdbc:mysql://localhost/gardenia?serverTimezone=America/Lima&useSSL=false
+    url: jdbc:mysql://db/gardenia?serverTimezone=America/Lima&useSSL=false
     username: root
     password: 202100067
 
