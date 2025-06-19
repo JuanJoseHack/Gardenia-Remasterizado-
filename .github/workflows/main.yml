@@ -45,7 +45,7 @@ jobs:
           echo "✅ Iniciando despliegue en el runner local..."
           
           # Navegamos a la carpeta que contiene el docker-compose.yml
-          cd docker
+          #cd docker
           
           # 1️⃣ Limpiamos cualquier despliegue anterior
           echo "🧹 Limpiando despliegue anterior (si existe)..."
