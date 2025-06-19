@@ -45,11 +45,11 @@ jobs:
 
           # 1️⃣ Limpiar despliegues anteriores
           echo "🧹 Limpiando despliegue anterior (si existe)..."
-          docker-compose -p ${{ env.DOCKER_PROJECT_NAME }} down -v --remove-orphans || echo "⚠️ No se encontró un despliegue anterior."
+          docker compose -p ${{ env.DOCKER_PROJECT_NAME }} down -v --remove-orphans || echo "⚠️ No se encontró un despliegue anterior."
 
           # 2️⃣ Levantar servicios
           echo "🏗️ Construyendo y levantando los servicios..."
-          docker-compose -p ${{ env.DOCKER_PROJECT_NAME }} up -d --build
+          docker compose -p ${{ env.DOCKER_PROJECT_NAME }} up -d --build
 
           # 3️⃣ Esperar que la DB esté lista
           echo "⏳ Esperando 30 segundos para que la DB se estabilice..."
@@ -60,7 +60,7 @@ jobs:
 
           # 4️⃣ Verificar el estado
           echo "🔍 Verificando estado de los contenedores..."
-          docker-compose -p ${{ env.DOCKER_PROJECT_NAME }} ps
+          docker compose -p ${{ env.DOCKER_PROJECT_NAME }} ps
 
           echo "🗒️ Últimos logs de la aplicación:"
           docker logs --tail 100 ${{ env.APP_CONTAINER_NAME }}
