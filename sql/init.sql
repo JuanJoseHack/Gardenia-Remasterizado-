@@ -1,3 +1,7 @@
+-- Crear base de datos si no existe y usarla
+CREATE DATABASE IF NOT EXISTS gardenia;
+USE gardenia;
+
 -- Eliminar las tablas si existen (en orden por dependencias)
 DROP TABLE IF EXISTS detalles;
 DROP TABLE IF EXISTS ordenes;
