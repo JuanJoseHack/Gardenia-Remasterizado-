@@ -3,15 +3,14 @@ version: '3.8'
 services:
   db:
     image: mysql:8.0
-    container_name: mysql-gardenia
+    container_name: mysql-gardenia-prod
     restart: always
     environment:
       MYSQL_DATABASE: 'gardenia'
       MYSQL_ROOT_PASSWORD: '202100067'
     volumes:
       - mysql_data:/var/lib/mysql
-      #- ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - ./sql:/docker-entrypoint-initdb.d/ 
+      - ./sql:/docker-entrypoint-initdb.d/
     ports:
       - '3309:3306'
     command: --default-authentication-plugin=mysql_native_password
@@ -24,7 +23,9 @@ services:
       - backend
 
   app:
-    build: .
+    build:
+      context: .        # Tu Dockerfile ya está en la raíz del proyecto
+      dockerfile: Dockerfile
     container_name: gardenia_app
     depends_on:
       db:

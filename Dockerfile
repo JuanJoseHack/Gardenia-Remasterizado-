@@ -1,14 +1,24 @@
 # Usa una imagen oficial de Java 17
 FROM eclipse-temurin:17-jdk-jammy
 
-# Directorio de trabajo dentro del contenedor
-WORKDIR /app
+# Configuración del directorio de la app
+ENV APP_HOME=/app
+RUN mkdir -p $APP_HOME
+WORKDIR $APP_HOME
 
-# Copiamos el JAR generado al contenedor
-COPY target/Gardenia-0.0.1-SNAPSHOT.jar app.jar
-
-# Exponemos el puerto del Spring Boot (ajústalo si usas otro)
+# Puerto usado por Spring Boot
 EXPOSE 8084
 
-# Comando para correr el app
+# Copiar el JAR (usando patrón para evitar dependencia del nombre exacto)
+COPY target/Gardenia-*.jar app.jar
+
+# Crear un usuario no root por seguridad
+RUN useradd -m appuser && chown -R appuser:appuser $APP_HOME
+USER appuser
+
+# Health check para monitoreo del contenedor
+HEALTHCHECK --interval=30s --timeout=3s \
+  CMD curl -f http://localhost:8084/actuator/health || exit 1
+
+# Comando para correr la aplicación
 ENTRYPOINT ["java", "-jar", "app.jar"]
