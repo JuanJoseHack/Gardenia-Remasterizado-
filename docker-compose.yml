@@ -3,7 +3,7 @@ version: '3.8'
 services:
   db:
     image: mysql:8.0
-    container_name: mysql-gardenia-prod
+    container_name: mysql-gardenia
     restart: always
     environment:
       MYSQL_DATABASE: 'gardenia'
