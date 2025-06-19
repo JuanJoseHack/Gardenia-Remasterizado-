@@ -11,7 +11,7 @@ on:
 env:
   DOCKER_PROJECT_NAME: 'gardenia_project'
   APP_CONTAINER_NAME: 'gardenia_app'
-  DB_CONTAINER_NAME: 'mysql-gardenia'
+  DB_CONTAINER_NAME: 'mysql-gardenia-prod'
   DB_NAME: 'gardenia'
   DB_USER: 'root'
   DB_PASSWORD: '202100067'

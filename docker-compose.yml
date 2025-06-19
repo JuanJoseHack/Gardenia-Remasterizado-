@@ -3,11 +3,12 @@ version: '3.8'
 services:
   db:
     image: mysql:8.0
-    container_name: mysql-gardenia
+    container_name: mysql-gardenia-prod
     restart: always
     environment:
       MYSQL_DATABASE: 'gardenia'
       MYSQL_ROOT_PASSWORD: '202100067'
+      MYSQL_PASSWORD: '202100067'
     volumes:
       - mysql_data:/var/lib/mysql
       - ./sql:/docker-entrypoint-initdb.d/
@@ -36,7 +37,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://db/gardenia?serverTimezone=America/Lima&useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: 202100067
-      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
     restart: unless-stopped
     networks:
       - backend
