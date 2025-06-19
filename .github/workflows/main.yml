@@ -56,7 +56,7 @@ jobs:
           sleep 30
 
           echo "💾 Inicializando base de datos desde init.sql..."
-          cat ./sql/init.sql | docker exec -i ${{ env.DB_CONTAINER_NAME }} mysql -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }} ${{ env.DB_NAME }}
+          cat ../sql/init.sql | docker exec -i ${{ env.DB_CONTAINER_NAME }} mysql -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }} ${{ env.DB_NAME }}
 
           # 4️⃣ Verificar el estado
           echo "🔍 Verificando estado de los contenedores..."
