@@ -73,7 +73,7 @@ pipeline {
             steps {
                 timeout(time: 10, unit: 'MINUTES') {
                     echo '📊 === INICIO: ANÁLISIS DE CALIDAD ==='
-                    withSonarQubeEnv('sonarqube') {
+                    withSonarQubeEnv('SonarQube') {
                         sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar -Pcoverage'
                     }
                     echo '✅ === FIN: ANÁLISIS DE CALIDAD COMPLETADO ==='
